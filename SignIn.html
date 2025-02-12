@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #8e44ad, #2d1606);
+        }
+
+        .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Container Styling */
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 1000px;
+            background-color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Login Box Styling */
+        .login-box {
+            flex: 1;
+            padding: 50px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .login-box h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .login-box form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-box input {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .login-box button {
+            padding: 15px;
+            background-color: #2d1606;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-box button:hover {
+            background-color: #804000;
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none; /* Hidden by default */
+        }
+
+        /* Signup Box Styling */
+        .signup-box {
+            flex: 1;
+            padding: 50px;
+            background: linear-gradient(135deg, #2d1606, #2d1606);
+            color: #fff;
+            text-align: center;
+        }
+
+        .signup-box button {
+            padding: 15px 30px;
+            background-color: #fff;
+            color: #2d1606;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .signup-box button:hover {
+            background-color: #804000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<video autoplay loop muted playsinline class="background-video">
+    <source src="Dollar.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+<div class="container">
+    <div class="login-box">
+        <h1>Login to Your Account</h1>
+        <p>Login using your email</p>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <!-- Error Message Placeholder -->
+            <div id="errorMessage" class="error-message"></div>
+
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+
+    <div class="signup-box">
+        <h2>New Here?</h2>
+        <p>Sign up and discover a great website to save money</p>
+        <button onclick="window.location.href='SignUp.html'">Sign Up</button>
+    </div>
+</div>
+
+<script>
+   async function handleLogin(event) {
+    event.preventDefault();
+
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const errorMessageDiv = document.getElementById('errorMessage');
+
+    try {
+        const response = await fetch('/signIn', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('authToken', data.token);
+            window.location.href = data.redirectUrl;  // Redirect based on user role
+        } else {
+            // Handle specific error responses
+            if (data.error === 'Email not found') {
+                showErrorMessage("❌ Email not found. Please register first.");
+            } else if (data.error === 'Incorrect password') {
+                showErrorMessage("🔒 Incorrect password. Please try again.");
+            } else {
+                showErrorMessage("⚠️ Something went wrong. Please try again.");
+            }
+        }
+    } catch (error) {
+        console.error("Login Error:", error);
+        showErrorMessage("⚠️ Wrong email or password");
+    }
+}
+
+// Show Error Message Function
+function showErrorMessage(message) {
+    const errorDiv = document.getElementById('errorMessage');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+}
+
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch('/signIn', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem('token', data.token);  // Save JWT for protected routes
+      window.location.href = data.redirectUrl;    // Redirect based on user role
+    } else {
+      alert(data.error || 'Login failed.');
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    alert('Error during login. Please try again.');
+  }
+});
+</script>
+
+</body>
+</html>
+

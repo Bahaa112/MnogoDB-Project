@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F0F0F0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-family: Poppins;
+            font-size: 50px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr auto;
+            gap: 10px;
+            margin-top: 2.1cm;
+            margin-bottom: 20px;
+        }
+
+        form input, form select, form button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: gold;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        form button:hover {
+            background-color: #FFCC00;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+        }
+
+        .history {
+            margin-top: 20px;
+        }
+
+        .history h2 {
+            color: #333;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history li {
+            background: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .expense-summary {
+            margin-top: 30px;
+        }
+
+        .expense-summary div {
+            margin-bottom: 10px;
+        }
+
+        .expense-summary .summary-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+
+        /* Style for the chart title in the circle */
+        .circle-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* Year selector */
+        .year-selector {
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Expenses</h1>
+
+        <form id="expenseForm">
+            <div class="type-container">
+                <select id="expenseType" required>
+                    <option value="">Select Type</option>
+                    <option value="Food">🍔 Food</option>
+                    <option value="Makeup">💄 Makeup</option>
+                    <option value="Education">📚 Education</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Transport">🚗 Transport</option>
+                    <option value="Healthcare">💊 Healthcare</option>
+                    <option value="Utilities">⚡ Utilities</option>
+                    <option value="Savings">💰 Savings</option>
+                    <option value="Clothing">👗 Clothing</option>
+                    <option value="Travel">✈️ Travel</option>
+                    <option value="Gifts">🎁 Gifts</option>
+                    <option value="Subscriptions">📦 Subscriptions</option>
+                    <option value="Other">❓ Other</option>
+                    <option value="Custom">🔧 Custom</option>
+                </select>
+            </div>
+            <input type="text" id="customType" placeholder="Custom Type (if selected)" style="display:none;">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="number" id="productCost" placeholder="Cost" required>
+            <input type="date" id="expenseDate" required>
+            <button type="submit">Add Expense</button>
+        </form>
+
+       
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Product</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+                <!-- Entries will appear here -->
+            </tbody>
+        </table>
+
+        <div class="total">Total: $<span id="total">0.00</span></div>
+
+        <div>
+            <h2>Expense Breakdown by Category</h2>
+            <div class="chart-container" style="position: relative; width: 400px; height: 400px;">
+                <canvas id="expenseChart" width="400" height="400"></canvas>
+                
+            </div>
+        </div>
+
+        <div>
+            <div class="year-selector">
+                <label for="yearSelector">Select Year:</label>
+                <select id="yearSelector">
+                    <option value="">Select Year</option>
+                </select>
+            </div>
+            <h2>Monthly Expense Breakdown</h2>
+            <canvas id="monthlyChart" width="400" height="400"></canvas>
+            <p>This chart shows how much you've spent each month in different categories.</p>
+            
+
+        </div>
+
+        <div>
+            <h2>Yearly Expense Breakdown</h2>
+            <canvas id="yearlyChart" width="400" height="400"></canvas>
+            <p>This chart shows how much you've spent each year in different categories.</p>
+        </div>
+
+        <div class="history">
+            <h2>Expense History</h2>
+            <ul id="historyList"></ul>
+        </div>
+
+        <div class="expense-summary">
+            <div class="monthly" id="monthlyExpense">Monthly Total: $0.00</div>
+            <div class="yearly" id="yearlyExpense">Yearly Total: $0.00</div>
+        </div>
+       
+        <div id="expenseMessage" style="text-align: center; font-size: 18px; margin-top: 30px; padding: 15px; background-color: #f4f4f4; border-radius: 8px; display: none;"></div>
+
+
+
+
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const form = document.getElementById('expenseForm');
+        const expenseTypeInput = document.getElementById('expenseType');
+        const customTypeInput = document.getElementById('customType');
+        const productNameInput = document.getElementById('productName');
+        const productCostInput = document.getElementById('productCost');
+        const expenseDateInput = document.getElementById('expenseDate');
+        const expenseTableBody = document.getElementById('expenseTableBody');
+        const totalDisplay = document.getElementById('total');
+        const historyList = document.getElementById('historyList');
+        const monthlyExpenseDisplay = document.getElementById('monthlyExpense');
+        const yearlyExpenseDisplay = document.getElementById('yearlyExpense');
+        const yearSelector = document.getElementById('yearSelector');
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+
+        let expenses = [];
+        let total = 0;
+
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9F40'],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        const monthlyChart = new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Monthly Expenses',
+                    data: [],
+                    borderColor: '#36A2EB',
+                    fill: false
+                }]
+            }
+        });
+
+        const yearlyChart = new Chart(yearlyCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Yearly Expenses',
+                    data: [],
+                    borderColor: '#FF9F40',
+                    fill: false
+                }]
+            }
+        });
+
+        expenseTypeInput.addEventListener('change', function() {
+            if (expenseTypeInput.value === 'Custom') {
+                customTypeInput.style.display = 'block';
+            } else {
+                customTypeInput.style.display = 'none';
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const type = expenseTypeInput.value === 'Custom' ? customTypeInput.value : expenseTypeInput.value;
+    const product = productNameInput.value;
+    const cost = parseFloat(productCostInput.value);
+    const date = expenseDateInput.value;
+
+    if (type && product && cost && date) {
+        const expenseDate = new Date(date);
+        expenses.push({ type, product, cost, date: expenseDate });
+        total += cost;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${type}</td><td>${product}</td><td>$${cost.toFixed(2)}</td>`;
+        expenseTableBody.appendChild(row);
+
+        totalDisplay.textContent = total.toFixed(2);
+
+        updateCharts();
+        updateMonthlyYearlyExpenses(expenseDate);
+
+        const historyEntry = document.createElement('li');
+        historyEntry.textContent = `${type}: ${product} - $${cost.toFixed(2)} on ${date}`;
+        historyList.appendChild(historyEntry);
+
+        expenseTypeInput.value = '';
+        customTypeInput.value = '';
+        customTypeInput.style.display = 'none';
+        productNameInput.value = '';
+        productCostInput.value = '';
+        expenseDateInput.value = '';
+    }
+});
+
+        
+        function populateYears() {
+            const years = [...new Set(expenses.map(expense => expense.date.getFullYear()))];
+            yearSelector.innerHTML = '<option value="">Select Year</option>'; // Reset options
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelector.appendChild(option);
+            });
+        }
+
+        yearSelector.addEventListener('change', function() {
+            updateMonthlyChart();
+        });
+
+        function updateCharts() {
+            const monthlyData = {};
+            const yearlyData = {};
+
+            expenses.forEach(expense => {
+                const month = expense.date.getMonth();
+                const year = expense.date.getFullYear();
+                
+                if (!monthlyData[month]) monthlyData[month] = {};
+                if (!yearlyData[year]) yearlyData[year] = {};
+
+                if (!monthlyData[month][expense.type]) monthlyData[month][expense.type] = 0;
+                if (!yearlyData[year][expense.type]) yearlyData[year][expense.type] = 0;
+
+                monthlyData[month][expense.type] += expense.cost;
+                yearlyData[year][expense.type] += expense.cost;
+            });
+
+            updateChartData(chart, monthlyData);
+            updateChartData(monthlyChart, monthlyData);
+            updateChartData(yearlyChart, yearlyData);
+            populateYears();
+        }
+
+        function updateChartData(chart, data) {
+            chart.data.labels = [];
+            chart.data.datasets[0].data = [];
+
+            for (const label in data) {
+                chart.data.labels.push(label);
+                let sum = 0;
+                for (const type in data[label]) {
+                    sum += data[label][type];
+                }
+                chart.data.datasets[0].data.push(sum);
+            }
+
+            chart.update();
+        }
+
+        const highSpendingTips = [
+    "Review your recurring subscriptions and cancel any unused ones.",
+    "Plan your meals for the week to avoid eating out frequently.",
+    "Consider setting a strict monthly budget for non-essential expenses.",
+    "Shop during sales and use discount coupons to save money.",
+    "Reevaluate your high-cost memberships or services.",
+    "Focus on paying off high-interest debt before making big purchases."
+];
+
+
+function getRandomTip(tipsArray) {
+    const randomIndex = Math.floor(Math.random() * tipsArray.length);
+    return tipsArray[randomIndex];
+}
+
+function updateMonthlyMessages() {
+    
+    const expensesByMonth = {};
+    
+    expenses.forEach(expense => {
+    const date = new Date(expense.date);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const key = `${year}-${month}`; // Correctly use backticks for template literals
+
+    if (!expensesByMonth[key]) {
+        expensesByMonth[key] = {
+            expenses: [],
+            totalSpent: 0,
+            categories: {}
+        };
+    }
+
+    expensesByMonth[key].expenses.push(expense);
+    expensesByMonth[key].totalSpent += expense.cost;
+
+    if (!expensesByMonth[key].categories[expense.type]) {
+        expensesByMonth[key].categories[expense.type] = 0;
+    }
+    expensesByMonth[key].categories[expense.type] += expense.cost;
+});
+
+    
+    let messagesContainer = document.getElementById('monthlyMessages');
+    if (!messagesContainer) {
+        messagesContainer = document.createElement('div');
+        messagesContainer.id = 'monthlyMessages';
+        document.querySelector('.container').appendChild(messagesContainer);
+    }
+
+   
+    messagesContainer.innerHTML = '<h2 style="text-align: center; margin: 30px 0;">Monthly Spending Analysis</h2>';
+
+    
+    const sortedMonths = Object.keys(expensesByMonth).sort().reverse();
+
+    
+    sortedMonths.forEach(monthKey => {
+        const [year, month] = monthKey.split('-');
+        const monthData = expensesByMonth[monthKey];
+        const monthName = new Date(year, month).toLocaleString('default', { month: 'long' });
+        
+       
+        let maxCategory = '';
+        let maxAmount = 0;
+        for (const category in monthData.categories) {
+            if (monthData.categories[category] > maxAmount) {
+                maxAmount = monthData.categories[category];
+                maxCategory = category;
+            }
+        }
+
+        let messageHTML = '';
+        const totalSpent = monthData.totalSpent;
+        const percentageInMaxCategory = ((maxAmount / totalSpent) * 100).toFixed(1);
+
+        if (totalSpent >= 1000 && totalSpent <= 3000) {
+            messageHTML = `
+                <div style="background-color: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="color: #2e7d32; margin-bottom: 15px;">✅ ${monthName} ${year} - Normal Spending</h3>
+                    <p>Total spent: $${totalSpent.toFixed(2)}</p>
+                    <p>Highest category: ${maxCategory} ($${maxAmount.toFixed(2)} - ${percentageInMaxCategory}% of monthly total)</p>
+                    <p>Status: Your spending is within the normal range.</p>
+                    <div style="margin-top: 10px; font-style: italic; color: #2e7d32;">
+                        💡 Tip: Consider setting aside some money for savings or investments.
+                    </div>
+                </div>`;
+        } else if (totalSpent > 3000) {
+            const randomTip = getRandomTip(highSpendingTips); 
+            messageHTML = `
+                <div style="background-color: #ffebee; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="color: #c62828; margin-bottom: 15px;">⚠️ ${monthName} ${year} - High Spending Alert</h3>
+                    <p>Total spent: $${totalSpent.toFixed(2)}</p>
+                    <p>Highest category: ${maxCategory} ($${maxAmount.toFixed(2)} - ${percentageInMaxCategory}% of monthly total)</p>
+                    <p>Status: Your spending exceeds the recommended monthly limit of $3,000.</p>
+                    <div style="margin-top: 15px; border-left: 3px solid #c62828; padding-left: 10px;">
+                        <h4 style="color: #c62828; margin-bottom: 10px;">Recommendations:</h4>
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li>• Consider reducing spending in ${maxCategory} category</li>
+                            <li>• Look for more affordable alternatives</li>
+                            <li>• Review your monthly subscriptions</li>
+                        </ul>
+                        <p style="margin-top: 10px; font-style: italic; color: #c62828;">💡 ${randomTip}</p>
+                    </div>
+                </div>`;
+        } else if (totalSpent > 0) { 
+            messageHTML = `
+                <div style="background-color: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h3 style="color: #1565c0; margin-bottom: 15px;">💫 ${monthName} ${year} - Low Spending</h3>
+                    <p>Total spent: $${totalSpent.toFixed(2)}</p>
+                    <p>Highest category: ${maxCategory} ($${maxAmount.toFixed(2)} - ${percentageInMaxCategory}% of monthly total)</p>
+                    <p>Status: Your spending is below the normal range.</p>
+                    <div style="margin-top: 10px; font-style: italic; color: #1565c0;">
+                        💡 Great job keeping expenses low! Consider investing the savings.
+                    </div>
+                </div>`;
+        }
+
+        if (messageHTML) {
+            messagesContainer.innerHTML += messageHTML;
+        }
+    });
+
+}
+
+
+const analysisButton = document.createElement('button');
+analysisButton.innerHTML = 'Show Monthly Analysis';
+analysisButton.style.cssText = `
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+`;
+analysisButton.addEventListener('mouseover', function() {
+    this.style.backgroundColor = '#1976D2';
+});
+analysisButton.addEventListener('mouseout', function() {
+    this.style.backgroundColor = '#2196F3';
+});
+analysisButton.addEventListener('click', updateMonthlyMessages);
+
+
+document.querySelector('.expense-summary').after(analysisButton);
+    </script>
+</body>
+</html>

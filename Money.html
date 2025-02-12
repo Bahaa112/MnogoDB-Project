@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fffff5;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fffff5;
+            border-radius: 10px;
+            position: relative;
+        }
+
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-family: Poppins;
+            font-size: 50px;
+        }
+
+
+        form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+        form input, form select, form button {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+
+        form button {
+            background-color: gold;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+
+        form button:hover {
+            background-color: #FFCC00;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+        }
+
+
+        .history {
+            margin-top: 20px;
+        }
+
+
+        .history h2 {
+            color: #333;
+        }
+
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+
+        .history li {
+            background: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .expense-summary {
+            margin-top: 30px;
+        }
+
+
+        .expense-summary div {
+            margin-bottom: 10px;
+        }
+
+
+        .expense-summary .summary-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+
+
+
+        /* Style for the chart title in the circle */
+        .circle-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+
+        /* Year selector */
+        .year-selector {
+            margin-bottom: 20px;
+        }
+
+
+        .update-btn, .delete-btn {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+  }
+
+
+  .update-btn {
+    background-color: #4CAF50;
+  }
+
+
+  .update-btn:hover {
+    background-color: #45a049;
+  }
+
+
+  .delete-btn {
+    background-color: #f44336;
+  }
+
+
+  .delete-btn:hover {
+    background-color: #d32f2f;
+  }
+
+
+  .dropdown {
+    position: absolute;   /* Position relative to the container */
+    top: 10px;           /* Adjust vertically */
+    left: 10px;          /* Adjust horizontally */
+    z-index: 1000;
+}
+
+
+/* Power icon styling */
+.dropdown-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+
+/* Ensure the container is positioned relative */
+
+
+
+
+/* Dropdown menu styling */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1001;
+}
+
+
+/* Dropdown links */
+.dropdown-content a {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+
+/* Hover effect on links */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+
+.search-dropdown {
+    position: relative;
+    margin-left: auto; /* Pushes the search icon to the right */
+}
+
+
+.search-icon {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+
+/* Dropdown Menu Styling */
+.search-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    z-index: 1001;
+}
+
+
+.search-dropdown-content a {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.search-dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+    .update-btn {
+        padding: 5px 10px;
+        margin: 0 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #007BFF;
+        color: white;
+    }
+
+    .update-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .delete-btn {
+        padding: 5px 10px;
+        margin: 0 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #FF4136;
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background-color: #cc2b1d;
+    }
+
+
+
+    </style>
+</head>
+<body>
+ 
+
+
+    <div class="container">
+      <div class="dropdown">
+        <img src="power.png" alt="Menu" class="dropdown-icon" onclick="toggleDropdown()">
+        <div id="dropdownMenu" class="dropdown-content">
+            <a href="profile.html">👤 Profile</a>
+            <a href="#" onclick="logoutUser()">🚪 Logout</a>
+        </div>
+    </div>
+
+
+   
+        <h1>Manage Expenses</h1>
+
+
+        <form id="expenseForm">
+            <div class="type-container">
+                <select id="expenseType" required>
+                    <option value="">Select Type</option>
+                    <option value="Food">🍔 Food</option>
+                    <option value="Makeup">💄 Makeup</option>
+                    <option value="Education">📚 Education</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Transport">🚗 Transport</option>
+                    <option value="Healthcare">💊 Healthcare</option>
+                    <option value="Utilities">⚡ Utilities</option>
+                    <option value="Savings">💰 Savings</option>
+                    <option value="Clothing">👗 Clothing</option>
+                    <option value="Travel">✈️ Travel</option>
+                    <option value="Gifts">🎁 Gifts</option>
+                    <option value="Subscriptions">📦 Subscriptions</option>
+                    <option value="Other">❓ Other</option>
+                    <option value="Custom">🔧 Custom</option>
+                </select>
+            </div>
+            <input type="text" id="customType" placeholder="Custom Type (if selected)" style="display:none;">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="number" id="productCost" placeholder="Cost" required>
+            <input type="date" id="expenseDate" required>
+            <button type="submit">Add Expense</button>
+
+
+            <div class="search-dropdown">
+              <img src="search.png" alt="Search" class="search-icon" onclick="toggleSearchDropdown()">
+              <div id="searchDropdownMenu" class="search-dropdown-content">
+                  <a href="#" onclick="filterByType('All')">All</a>
+                  <a href="#" onclick="filterByType('Food')">🍔 Food</a>
+                  <a href="#" onclick="filterByType('Makeup')">💄 Makeup</a>
+                  <a href="#" onclick="filterByType('Education')">📚 Education</a>
+                  <a href="#" onclick="filterByType('Entertainment')">🎬 Entertainment</a>
+                  <a href="#" onclick="filterByType('Transport')">🚗 Transport</a>
+                  <a href="#" onclick="filterByType('Healthcare')">💊 Healthcare</a>
+                  <a href="#" onclick="filterByType('Utilities')">⚡ Utilities</a>
+                  <a href="#" onclick="filterByType('Savings')">💰 Savings</a>
+                  <a href="#" onclick="filterByType('Clothing')">👗 Clothing</a>
+                  <a href="#" onclick="filterByType('Travel')">✈️ Travel</a>
+                  <a href="#" onclick="filterByType('Gifts')">🎁 Gifts</a>
+                  <a href="#" onclick="filterByType('Subscriptions')">📦 Subscriptions</a>
+                  <a href="#" onclick="filterByType('Other')">❓ Other</a>
+              </div>
+          </div>
+        </form>
+
+
+       
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Product</th>
+                    <th>Cost</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="expenseTableBody">
+                <!-- Entries will appear here -->
+            </tbody>
+        </table>
+
+
+        <div class="total">Total: <span id="total">0.00</span></div>
+       
+
+
+        <div>
+            <h2>Expense Breakdown by Category</h2>
+            <div class="chart-container" style="position: relative; width: 400px; height: 400px;">
+                <canvas id="expenseChart" width="400" height="400"></canvas>
+               
+            </div>
+        </div>
+
+
+        <div>
+            <div class="year-selector">
+                <label for="yearSelector">Select Year:</label>
+                <select id="yearSelector">
+                    <option value="">Select Year</option>
+                </select>
+            </div>
+            <h2>Monthly Expense Breakdown</h2>
+            <canvas id="monthlyChart" width="400" height="400"></canvas>
+            <p>This chart shows how much you've spent each month in different categories.</p>
+           
+
+
+        </div>
+
+
+        <div>
+            <h2>Yearly Expense Breakdown</h2>
+            <canvas id="yearlyChart" width="400" height="400"></canvas>
+            <p>This chart shows how much you've spent each year in different categories.</p>
+        </div>
+
+
+       
+
+
+       
+       
+        <div id="expenseMessage" style="text-align: center; font-size: 18px; margin-top: 30px; padding: 15px; background-color: #f4f4f4; border-radius: 8px; display: none;"></div>
+
+
+
+        <div id="reportSection" style="display: none; background: #FFF7E6; padding: 20px; border-radius: 8px; margin-top: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+          <!-- This section will show the report once generated -->
+        </div>
+        
+        <!-- Add the button below the table -->
+        <div style="text-align: center; margin-top: 20px;">
+          <button id="generateReport" style="padding: 15px 30px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
+            Generate Monthly Report
+          </button>
+        </div>
+        
+      
+
+
+
+
+       
+    </div>
+
+
+    <div id="updateModal" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:white; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index: 1000;">
+        <h3>Update Expense</h3>
+        <input type="text" id="updateProduct" placeholder="Product Name"><br><br>
+        <input type="number" id="updateCost" placeholder="Cost"><br><br>
+        <button onclick="submitUpdate()">Save</button>
+        <button onclick="closeUpdateModal()">Cancel</button>
+      </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      let chart = null; // Global variable to store the chart instance
+
+    let authToken = localStorage.getItem('authToken');
+        let currentExpenseId = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!authToken) {
+                alert('Please login first');
+                window.location.href = '/';
+                return;
+            }
+
+            await loadExpenses();
+            setupEventListeners();
+        });
+
+        // Event Listeners
+        function setupEventListeners() {
+            document.getElementById('expenseForm').addEventListener('submit', addExpense);
+        }
+
+        // Load expenses from server
+        async function loadExpenses() {
+            try {
+                const response = await fetch('/getExpenses', {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) throw new Error('Failed to load expenses');
+                
+                const expenses = await response.json();
+                renderExpenses(expenses);
+                updateTotal(expenses);
+                updateCharts(expenses); 
+                updateMonthlyChart(expenses);  // Add this line
+                updateYearlyChart(expenses);  // Add this line
+
+
+
+            } catch (error) {
+                alert(error.message);
+                console.error('Error:', error);
+            }
+        }
+
+        // Render expenses in table
+        function renderExpenses(expenses) {
+            const tbody = document.getElementById('expenseTableBody');
+            tbody.innerHTML = '';
+
+            expenses.forEach(expense => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${expense.type}</td>
+                    <td>${expense.product}</td>
+                    <td>$${expense.cost.toFixed(2)}</td>
+                    <td>${new Date(expense.date).toLocaleDateString()}</td>
+                    <td>
+                        <button class="update-btn" onclick="openUpdateModal('${expense._id}', '${expense.product}', ${expense.cost})">
+    Edit
+</button>
+<button class="delete-btn" onclick="deleteExpense('${expense._id}')">
+    Delete
+</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            document.querySelectorAll('.update-btn').forEach(btn => btn.style.backgroundColor = '#007BFF');
+    document.querySelectorAll('.delete-btn').forEach(btn => btn.style.backgroundColor = '#FF4136');
+        }
+
+        // Add new expense
+        async function addExpense(event) {
+    event.preventDefault();
+    
+    const formData = {
+        type: document.getElementById('expenseType').value,
+        product: document.getElementById('productName').value,
+        cost: parseFloat(document.getElementById('productCost').value),
+        date: document.getElementById('expenseDate').value
+    };
+
+    try {
+        const response = await fetch('/addExpense', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error);
+        }
+
+        document.getElementById('expenseForm').reset();
+        await loadExpenses(); // This will call updateMonthlyChart internally
+
+    } catch (error) {
+        alert(error.message);
+        console.error('Error:', error);
+    }
+}
+
+        // Delete expense
+        async function deleteExpense(expenseId) {
+    try {
+        const response = await fetch(`/deleteExpense/${expenseId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        if (!response.ok) throw new Error('Failed to delete expense');
+
+        await loadExpenses(); // Reload the expenses to update the table
+    } catch (error) {
+        alert(error.message);
+        console.error('Error:', error);
+    }
+}
+
+        // Update expense modal
+        function openUpdateModal(expenseId, product, cost) {
+            currentExpenseId = expenseId;
+            document.getElementById('updateProduct').value = product;
+            document.getElementById('updateCost').value = cost;
+            document.getElementById('updateModal').style.display = 'block';
+        }
+
+        // Submit update
+        async function submitUpdate() {
+            const updatedData = {
+                product: document.getElementById('updateProduct').value,
+                cost: parseFloat(document.getElementById('updateCost').value)
+            };
+
+            try {
+                const response = await fetch(`/updateExpense/${currentExpenseId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) throw new Error('Failed to update expense');
+                
+                document.getElementById('updateModal').style.display = 'none';
+                await loadExpenses();
+
+            } catch (error) {
+                alert(error.message);
+                console.error('Error:', error);
+            }
+        }
+
+        function updateCharts(expenses) {
+    const chartDataMap = {};
+
+    // Aggregate expenses by type
+    expenses.forEach(expense => {
+        chartDataMap[expense.type] = (chartDataMap[expense.type] || 0) + expense.cost;
+    });
+
+    const labels = Object.keys(chartDataMap);
+    const data = Object.values(chartDataMap);
+
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+
+    // Destroy the previous chart if it exists
+    if (chart) {
+        chart.destroy();
+    }
+
+    // Create a new chart
+    chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9F40'],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+}
+
+        // Helper functions
+        function updateTotal(expenses) {
+            const total = expenses.reduce((sum, expense) => sum + expense.cost, 0);
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        function updateMonthlyChart(expenses) {
+    const monthlyDataMap = {};
+
+    // Aggregate expenses by month (format: YYYY-MM)
+    expenses.forEach(expense => {
+        const date = new Date(expense.date);
+        const monthYear = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        monthlyDataMap[monthYear] = (monthlyDataMap[monthYear] || 0) + expense.cost;
+    });
+
+    const labels = Object.keys(monthlyDataMap).sort();
+    const data = Object.values(monthlyDataMap);
+
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+
+    // Destroy the previous chart if it exists
+    if (window.monthlyChart && typeof window.monthlyChart.destroy === 'function') {
+        window.monthlyChart.destroy();
+    }
+
+    // Create a new bar chart for monthly expenses
+    window.monthlyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Monthly Expenses',
+                data: data,
+                backgroundColor: '#36A2EB',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { title: { display: true, text: 'Month-Year' } },
+                y: { title: { display: true, text: 'Total Expense ($)' } }
+            }
+        }
+    });
+}
+
+function updateYearlyChart(expenses) {
+    const yearlyDataMap = {};
+
+    // Aggregate expenses by year
+    expenses.forEach(expense => {
+        const date = new Date(expense.date);
+        const year = date.getFullYear();
+        yearlyDataMap[year] = (yearlyDataMap[year] || 0) + expense.cost;
+    });
+
+    const labels = Object.keys(yearlyDataMap).sort();
+    const data = Object.values(yearlyDataMap);
+
+    const ctx = document.getElementById('yearlyChart').getContext('2d');
+
+    // Destroy the previous chart if it exists
+    if (window.yearlyChart && typeof window.yearlyChart.destroy === 'function') {
+        window.yearlyChart.destroy();
+    }
+
+    // Create a new bar chart for yearly expenses
+    window.yearlyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Yearly Expenses',
+                data: data,
+                backgroundColor: '#FF9F40',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { title: { display: true, text: 'Year' } },
+                y: { title: { display: true, text: 'Total Expense ($)' } }
+            }
+        }
+    });
+}
+document.getElementById('generateReport').addEventListener('click', async () => {
+    const monthlyReport = await generateMonthlyReport();
+    displayEnhancedReport(monthlyReport);
+});
+
+async function generateMonthlyReport() {
+    try {
+        const response = await fetch('/api/income-expenses', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (!response.ok) throw new Error('Failed to generate report');
+
+        const data = await response.json();
+        const monthlyExpenses = data.expenses;
+        const salary = data.salary;
+
+        let report = [];
+        monthlyExpenses.forEach((expense, index) => {
+            if (expense > 0) {  // Only include months with expenses greater than 0
+                const monthName = new Date(0, index).toLocaleString('default', { month: 'long' });
+                const topCategory = 'Other'; // Placeholder for actual logic to determine top category
+                const debtToIncomeRatio = ((expense / salary) * 100).toFixed(2);
+                report.push({
+                    month: monthName,
+                    totalSpent: expense,
+                    topCategory: topCategory,
+                    debtToIncomeRatio: debtToIncomeRatio,
+                    remaining: Math.max(salary - expense, 0),
+                    budgetAllocation: {
+                        needs: (expense * 0.5).toFixed(2),
+                        wants: (expense * 0.3).toFixed(2),
+                        savings: (expense * 0.2).toFixed(2)
+                    },
+                    savingsProjection: (salary * 1.05).toFixed(2),
+                    debtPayoffMonths: Math.ceil(expense / 200) // Assumes $200/month for debt payoff
+                });
+            }
+        });
+
+        return report;
+
+    } catch (error) {
+        console.error('Error generating report:', error);
+        alert('Error generating report');
+        return [];
+    }
+}
+
+
+function displayEnhancedReport(report) {
+    let reportContent = `<h3 style="color: #FF6F00; font-size: 24px; margin-bottom: 20px;">Monthly Financial Breakdown</h3>`;
+
+    report.forEach(item => {
+        reportContent += `
+            <div style="border-bottom: 1px solid #ddd; padding: 15px 0;">
+                <h4 style="color: #FF6F00;">📅 ${item.month} 2025 - Financial Breakdown</h4>
+                <p><strong>Total Spent:</strong> $${item.totalSpent.toFixed(2)}</p>
+                <p><strong>Top Spending Category:</strong> ${item.topCategory} ($${item.totalSpent.toFixed(2)})</p>
+                <p><strong>Debt-to-Income Ratio:</strong> ${item.debtToIncomeRatio}%</p>
+                <h5>📊 <strong>Budget Allocation (50/30/20 Rule)</strong></h5>
+                <ul>
+                    <li>🛒 <strong>Needs (50%):</strong> $${item.budgetAllocation.needs}</li>
+                    <li>🎉 <strong>Wants (30%):</strong> $${item.budgetAllocation.wants}</li>
+                    <li>💰 <strong>Savings (20%):</strong> $${item.budgetAllocation.savings}</li>
+                </ul>
+                <h5>📈 <strong>Savings Growth Projection</strong></h5>
+                <p>If you save your remaining budget, it could grow to <strong>$${item.savingsProjection}</strong> in a year (at 5% interest).</p>
+                <h5>⏳ <strong>Debt Payoff Estimation</strong></h5>
+                <p>With a $200 monthly payment, your debt could be paid off in <strong>${item.debtPayoffMonths} months</strong>.</p>
+                <h5>💡 <strong>Investment Suggestion</strong></h5>
+                <p>Consider low-risk investments like bonds or index funds.</p>
+            </div>
+        `;
+    });
+
+    document.getElementById('reportSection').innerHTML = reportContent;
+    document.getElementById('reportSection').style.display = 'block';
+}
+
+function toggleSearchDropdown() {
+  const dropdown = document.getElementById('searchDropdownMenu');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+async function filterByType(type) {
+  toggleSearchDropdown();  // Close the dropdown after selection
+  try {
+    const response = await fetch('/getExpenses', {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+
+    if (!response.ok) throw new Error('Failed to load expenses');
+    
+    let expenses = await response.json();
+    if (type !== 'All') {
+      expenses = expenses.filter(expense => expense.type === type);
+    }
+    renderExpenses(expenses);
+    updateTotal(expenses);
+    updateCharts(expenses);
+    updateMonthlyChart(expenses);
+    updateYearlyChart(expenses);
+
+  } catch (error) {
+    console.error('Error filtering expenses:', error);
+  }
+}
+
+function toggleDropdown() {
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close the dropdown if the user clicks outside of it
+window.addEventListener('click', function (event) {
+  if (!event.target.matches('.dropdown-icon')) {
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    if (dropdownMenu.style.display === 'block') {
+      dropdownMenu.style.display = 'none';
+    }
+  }
+});
+
+// Logout function
+function logoutUser() {
+  // Clear the token from localStorage
+  localStorage.removeItem('authToken');
+  alert('You have been logged out.');
+  window.location.href = '/'; // Redirect to the login page
+}
+
+
+
+        function closeModal() {
+            document.getElementById('updateModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+

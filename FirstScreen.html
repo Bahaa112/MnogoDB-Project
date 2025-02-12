@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Budget - Expense Manager</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Poppins;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: #fffff5;
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fffff5;
+            color: black;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header .logo {
+            font-size: 1.9em;
+            font-weight: bold;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin-right: 670px;
+            margin-top: 5px;
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        header nav ul li a:active {
+            color: #ffcc00;
+        }
+
+        /* Logo Button Dropdown */
+        .logo-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo-button {
+            font-size: 2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: #fffff5;
+            border: 1px solid #fffff5;
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: black;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a span {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Dropdown visibility */
+        .logo-container:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Hero Section with Video Background */
+        .hero-section {
+            position: relative;
+            color: black;
+            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hero-section video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.85);
+            z-index: 0;
+        }
+
+        .hero-section .content {
+            position: relative;
+            z-index: 1;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+        }
+
+        .hero-section p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .download-buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fffff5;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2em;
+            }
+        }
+
+        .charts-section {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .charts-section {
+            display: flex;
+            flex-direction: column;
+            /* Stack charts vertically */
+            align-items: center;
+            gap: 30px;
+            /* Space between charts */
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Chart Container Styling */
+        .chart-container {
+            background-color: #fffff5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+            /* Adjust width for better layout */
+            max-width: 800px;
+            /* Prevent it from being too wide on large screens */
+        }
+
+
+        canvas {
+            width: 100% !important;
+            height: 350px !important;
+            /* Adjusted height for better readability */
+        }
+
+        .statistics-intro {
+            text-align: center;
+            padding: 20px;
+            background-color: #fffff5;
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        .statistics-intro h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .statistics-intro p {
+            font-size: 1.2em;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">💰 Smart Budgeting</div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="About Us.html">About Us</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="ContactUs.html">Contact Us</a></li>
+            </ul>
+        </nav>
+
+        <!-- Logo Dropdown -->
+        <div class="logo-container">
+            <button class="logo-button">⚙️</button>
+            <div class="dropdown-menu">
+                <a href="SignIn.html"><span>Log in</span></a>
+                <a href="SignUp.html"><span>Sign up</span></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section with Video Background -->
+    <main>
+        <div class="hero-section">
+            <video autoplay muted loop preload="auto">
+                <source src="MainScreen.mp4" type="video/mp4">
+                <source src="new.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+            <div class="content">
+                <h1>Smart Budgeting</h1>
+                <h2> financial tracker</h2>
+                <p>Manage your personal finances and easily track your money, expenses, and budget.</p>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Overview Section -->
+    <section class="statistics-intro">
+        <h2>Website Statistics Overview</h2>
+        <p>Explore insightful data about our users and their financial behaviors through interactive charts.</p>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Container for Charts -->
+    <section class="charts-section">
+        <div class="chart-container">
+            <h3>Gender Distribution</h3>
+            <canvas id="genderChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>Age Distribution</h3>
+            <canvas id="ageChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>User Registration Over Time</h3>
+            <canvas id="registrationChart"></canvas>
+        </div>
+    </section>
+
+
+    <script>
+        // Gender Chart
+        async function renderGenderChart() {
+            const response = await fetch('/api/gender-ratio');
+            const data = await response.json();
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Male', 'Female'],
+                    datasets: [{
+                        data: [data.male, data.female],
+                        backgroundColor: ['#2E7D32', '#D4AF37'],
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Male vs Female Ratio',
+                            font: { size: 14 },
+                        },
+                    },
+                },
+            });
+        }
+
+        // Age Distribution Chart
+        async function renderAgeChart() {
+            const response = await fetch('/api/age-distribution');
+            const data = await response.json();
+            const labels = ['0-18', '19-25', '26-35', '36-45', '46-60', '60+'];
+            const counts = data.length > 0 ? data.map(group => group.count) : [0];
+
+            const ctx = document.getElementById('ageChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Age Distribution',
+                        data: counts,
+                        backgroundColor: ['#2E7D32', '#5D4037', '#D4AF37', '#8D9440', '#B87333', '#424242'],
+
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'User Age Distribution',
+                            font: { size: 14 },
+                        },
+                    },
+                    scales: {
+                        y: { beginAtZero: true },
+                    },
+                },
+            });
+        }
+
+        // User Registration Over Time
+        async function renderRegistrationChart() {
+            const response = await fetch('/api/registration-over-time');
+            const data = await response.json();
+
+            const labels = data.length > 0
+                ? data.map(item => `Month ${item._id}`)
+                : ['No Data'];
+
+            const counts = data.length > 0
+                ? data.map(item => item.count)
+                : [0];
+
+            const ctx = document.getElementById('registrationChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Registrations',
+                        data: counts,
+                        borderColor: '#2E7D32',                // Dark Green for the line
+                        backgroundColor: 'rgba(46, 125, 50, 0.2)',  // Transparent Green for fill
+                        pointBackgroundColor: '#D4AF37'       // Gold for data points
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'User Registrations Over Time',
+                            font: { size: 16 },
+                            color: '#333'
+                        },
+                        legend: {
+                            labels: {
+                                color: '#333'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#333' }
+                        },
+                        x: {
+                            ticks: { color: '#333' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Call functions on page load
+        window.onload = function () {
+            renderGenderChart();
+            renderAgeChart();
+            renderRegistrationChart();
+        };
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Poppins;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: #fffff5;
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fffff5;
+            color: black;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 2;
+            margin-top: -13px;
+        }
+
+        header .logo {
+            font-size: 1.9em;
+            font-weight: bold;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin-right: 680px;
+            margin-top: 5px;
+
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        header nav ul li a:active {
+            color: #ffcc00;
+        }
+
+        /* Logo Button Dropdown */
+        .logo-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo-button {
+            font-size: 2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 10;
+            text-align: center;
+
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: black;
+            transition: background 0.3s;
+
+        }
+
+        .dropdown-menu a span {
+            display: inline;
+            white-space: nowrap;
+
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+
+        }
+
+        /* Dropdown visibility */
+        .logo-container:hover .dropdown-menu {
+            display: block;
+
+        }
+
+        /* Contact Us Section */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+            display: flex;
+            gap: 3rem;
+            background: #fffff5;
+            border-radius: 20px;
+            margin: 2rem auto;
+        }
+
+        .contact-info {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .contact-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #2d1606, #2d1606);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact-details {
+            margin-bottom: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #fffff5;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            border: 1px solid #fffff5;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #2d1606;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #fffff5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2d1606;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            color: #fffff5;
+            background-color: #2d1606;
+        }
+
+        .contact-form {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: #fffff5;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            color: #2d3748;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2d1606;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #2d1606, #2d1606);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px #2d1606;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">💰 Smart Budgeting</div>
+        <nav>
+            <ul>
+                <li><a href="FirstScreen.html">Home</a></li>
+                <li><a href="About Us.html">About Us</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="ContactUs.html">ContactUs</a></li>
+            </ul>
+        </nav>
+        <div class="logo-container">
+            <button class="logo-button">⚙️</button>
+            <div class="dropdown-menu">
+                <a href="SignIn.html"><span>Log in</span></a>
+                <a href="SignUp.html"><span>Sign up</span></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="contact-info">
+            <h1>Get in Touch</h1>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>0599081408</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>SmartBudgeting@gmail.com</span>
+                </div>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="contact-form">
+            <form>
+                <div class="form-group">
+                    <input type="text" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

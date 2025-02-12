@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team and About Section</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: sans-Poppins; /* Cinzel font for everything else */
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #fffff5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            background-color: #fffff5;
+
+        }
+        
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: fantasy; /* Fantasy font for this part */
+            color: black;
+            background-color: #fffff5;
+
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: black;
+        }
+
+        .team {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .team-member {
+            text-align: center;
+            width: 200px;
+        }
+
+        .team-member img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .team-member h3 {
+            font-size: 1.2rem;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            font-family: fantasy; /* Fantasy font for team member names */
+            color: black;
+        }
+
+        .team-member p {
+            font-size: 0.9rem;
+            color: black;
+        }
+
+        .about {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .about p {
+            font-size: 1rem;
+            color: black;
+        }
+
+        .responses {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .response {
+            background-color: #fffff5;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .response:hover {
+            transform: translateY(-10px);
+        }
+
+        .response:active {
+            transform: translateY(0px) scale(0.95);
+        }
+
+        .response p {
+            font-size: 0.95rem;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .response span {
+            font-size: 0.85rem;
+            color:black;
+        }
+        
+        .Aimm-container {
+            display: flex;
+            gap: 20px; /* Space between boxes */
+            justify-content: center; /* Center-align the boxes */
+            padding: 20px;
+        }
+
+        .Aimm {
+            background-color: #fffff5;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .Aimm:hover {
+            transform: translateY(-10px);
+        }
+
+        .Aimm p {
+            font-size: 0.95rem;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color:#fffff5;
+            color: black;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header .logo {
+            font-size: 1.9em;
+            font-weight: bold;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin-right: 690px;
+            margin-bottom: 1px;
+            margin-top: 10px;
+            padding-right: 10px;
+            background-color: #fffff5;
+
+            
+
+        }
+
+        header nav ul li a {
+            color:black;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            background-color: #fffff5;
+
+        }
+
+        header nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        header nav ul li a:active {
+            color: #ffcc00;
+        }
+
+        /* Logo Button Dropdown */
+        .logo-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo-button {
+            font-size: 2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: black;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a span {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Dropdown visibility */
+        .logo-container:hover .dropdown-menu {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">💰 Smart Budgeting</div>
+        <nav>
+            <ul>
+                <li><a href="FirstScreen.html">Home</a></li>
+                <li><a href="About Us.html">About Us</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="ContactUs.html">ContactUs</a></li>
+
+            </ul>
+        </nav>
+        
+        <!-- Logo Dropdown -->
+        <div class="logo-container">
+            <button class="logo-button">⚙️</button>
+            <div class="dropdown-menu">
+                <a href="SignIn.html"><span>Log in</span></a>
+                <a href="SignUp.html"><span>Sign up</span></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to the Expense Tracker for the Month.</h1>
+            <p>Your reliable guide to achieving financial well-being. We are a driven group founded by Deema, Aseel, and Baha with the common purpose of 
+                enabling people to take charge of their money, reach their objectives, and live more financially independent lives.</p>
+        </div>
+
+        <div class="team">
+            <div class="team-member">
+                <div style="position: relative;">
+                    <img src="deemaa.jpeg" alt="Deema Abu Nimeh">
+                </div>
+                <h3>Deema Abu Nimeh</h3>
+
+            </div>
+            <div class="team-member">
+                <div style="position: relative;">
+                    <img src="asssel.jpeg" alt="Aseel Abd Elhaq">
+                </div>
+                <h3>Aseel Abd Elhaq</h3>
+              
+            </div>
+            <div class="team-member">
+                <div style="position: relative;">
+                    <img src="baha.jpeg" alt="Baha Jaghoob">
+                </div>
+                <h3>Baha Jaghoob</h3>
+            
+            </div>
+        </div>
+
+        <div class="about">
+            <h2>About Our Company</h2>
+            <p>The Reason Behind Our Monthly Expense Tracker
+                We are aware of how stressful money management may be. We can assist you whether you're attempting to reduce wasteful spending, saving for a significant life event, or just want a better understanding of your financial situation. Based on our own experiences and a deep conviction in the value of prudent financial practices, 
+                we developed this platform to make money management easy, approachable, and even fun.</p>
+        </div>
+        <div class="aims">
+            <p>
+                What to anticipate
+Our platform is made to accommodate your current financial situation. Monthly Expense Tracker allows you to:
+            </p>
+            
+       <div>
+        <div class="Aimm-container">
+            <div class="Aimm">
+                <p>Monitor Your Spending: Discover trends in your spending patterns and get real-time insights on where your money is going.</p>
+            </div>
+            <div class="Aimm">
+                <p>Visualize Your Expenses: Make use of interactive graphs and charts to make financial analysis fun and simple.</p>
+            </div>
+            <div class="Aimm">
+                <p>Seek Professional Guidance: Get individualized advice and tactics from financial professionals to increase your wealth and save as much as possible.</p>
+            </div>
+            <div class="Aimm">
+                <p>Make Plans and Be Responsible: Establish your financial objectives, monitor your progress, and acknowledge your victories as you go.</p>
+            </div>
+        </div>
+        <div>
+            <p>
+                Our Assure to You We pledge to offer a platform that is:
+            </p>
+        </div>
+           
+           </div>
+        </div>
+        <div class="responses">
+            <div class="response">
+                <p>
+                    Easy to use: Made for all users, regardless of financial background or expertise.</p>
+           
+            </div>
+            <div class="response">
+                <p>Safe & Trustworthy: Your information is secure with us,We are sure to prioritize your privacy at every step.
+                    </p>
+               
+            </div>
+            <div class="response">
+                <p>Empowering: Designed to give you the confidence to make wise financial decisions.</p>
+            </div>
+           
+        </div>
+        <div>
+            <p>
+                We are more than simply a tool,We are a developing group of people who want to make better financial choices. 
+                Regardless of how huge your goals are or how modest you're starting, 
+                Monthly Expense Tracker is here to

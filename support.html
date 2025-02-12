@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Page</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Poppins;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: #fffff5;
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fffff5;
+            color: black;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header .logo {
+            font-size: 1.9em;
+            font-weight: bold;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin-right: 690px;
+            margin-top: 5px;
+        }
+
+        header nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        header nav ul li a:active {
+            color: #ffcc00;
+        }
+
+        /* Logo Button Dropdown */
+        .logo-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo-button {
+            font-size: 2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: black;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a span {
+            display: inline;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Dropdown visibility */
+        .logo-container:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Support Section */
+        .support-container {
+            padding: 20px;
+        }
+
+        .support-container h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 50%;
+            padding: 10px;
+            font-size: 1.4rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .articles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .article-item {
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .article-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            background-color: #F5F5DC;
+                        color: #2d1606;
+
+
+        }
+
+        .questions {
+            margin-top: 20px;
+        }
+
+        .questions h3 {
+            font-size: 1.8rem;
+            text-align: left;
+            margin-bottom: 10px;
+            color: black;
+        }
+
+        .questions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+
+        .questions ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.4rem;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">💰 Smart Budgeting</div>
+        <nav>
+            <ul>
+                <li><a href="FirstScreen.html">Home</a></li>
+                <li><a href="About Us.html">About Us</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="ContactUs.html">ContactUs</a></li>
+
+            </ul>
+        </nav>
+        
+        <!-- Logo Dropdown -->
+        <div class="logo-container">
+            <button class="logo-button">⚙️</button>
+            <div class="dropdown-menu">
+                <a href="SignIn.html"><span>Log in</span></a>
+                <a href="SignUp.html"><span>Sign up</span></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Support Content -->
+    <div class="support-container">
+        <h1>Support</h1>
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="What can we help you with?">
+        </div>
+
+        <h2>Common Questions</h2>
+        <div class="articles">
+            <div class="article-item" onclick="showQuestions('signUp')">How to sign up?</div>
+            <div class="article-item" onclick="showQuestions('login')">How to login?</div>
+            <div class="article-item" onclick="showQuestions('pay')">Do I have to pay to use the website?</div>
+            <div class="article-item" onclick="showQuestions('add')">How do I add a new expense?</div>
+            <div class="article-item" onclick="showQuestions('categorize')">How can I categorize my expenses?</div>
+            <div class="article-item" onclick="showQuestions('delete')">Can I edit or delete an expense I added?</div>
+            <div class="article-item" onclick="showQuestions('history')">How can I see my spending history?</div>
+            <div class="article-item" onclick="showQuestions('filter')">Is there a way to filter expenses by category?</div>
+            <div class="article-item" onclick="showQuestions('track')">Can I track my expenses over time?</div>
+            <div class="article-item" onclick="showQuestions('budget')">How do I set a budget for a category?</div>
+            <div class="article-item" onclick="showQuestions('spent')">Can I see how much I’ve spent in each category?</div>
+            <div class="article-item" onclick="showQuestions('forget')">What should I do if I forget to add an expense?</div>
+            <div class="article-item" onclick="showQuestions('export')">Can I export my expense data?</div>
+            <div class="article-item" onclick="showQuestions('clear')">How do I reset or clear all my expenses?</div>
+            <div class="article-item" onclick="showQuestions('overspending')">How do I know if I am overspending?</div>
+            <div class="article-item" onclick="showQuestions('safe')">Is my expense data safe?</div>
+            <div class="article-item" onclick="showQuestions('income')">Can I add income to the app?</div>
+            <div class="article-item" onclick="showQuestions('logout')">How do I log out of my account?</div>
+        </div>
+
+        <div class="questions" id="questions-container" style="display:none;">
+            <h3>Common Questions</h3>
+            <ul id="questions-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const questionsData = {
+            signUp: ["You can sign up using your name, email, phone number, password, and gender."],
+            login: ["First, create an account on the website. Then log in using your email and password."],
+            pay: ["Our website and all its features are free to use."],
+            add: ["Go to 'Add Expense', enter details like amount, category, and description, and click 'Save'."],
+            categorize: ["Select a category (e.g., food, transport) from the dropdown menu when adding an expense."],
+            delete: ["Find the expense in 'Expense List' and click 'Edit' or 'Delete' to update or remove it."],
+            history: ["Check your Dashboard or 'Expense List' to view your spending history."],
+            filter: ["Use the filter option in the Dashboard to see expenses by category."],
+            track: ["View weekly or monthly summaries on the Dashboard to track your expenses over time."],
+            budget: ["Set a budget in 'Budget Settings' and receive alerts if you exceed it."],
+            spent: ["Check the category breakdown chart on the Dashboard to see your spending by category."],
+            forget: ["Go to 'Add Expense' and input the details of the missed expense."],
+            export: ["Click 'Export' on the Dashboard to download your data in CSV or PDF format."],
+            clear: ["Go to 'Settings' and click 'Clear All Data' to reset your expenses."],
+            overspending: ["Set budgets and check the Dashboard for overspending alerts."],
+            safe: ["Your data is encrypted and secure."],
+            income: ["Add income in the 'Add Income' section to track finances comprehensively."],
+            logout: ["Click your profile icon or go to 'Settings' and select 'Log Out'."]
+        };
+
+        function showQuestions(topic) {
+            const questionsContainer = document.getElementById('questions-container');
+            const questionsList = document.getElementById('questions-list');
+            questionsList.innerHTML = '';
+
+            if (questionsData[topic]) {
+                questionsData[topic].forEach(question => {
+                    const li = document.createElement('li');
+                    li.textContent = question;
+                    questionsList.appendChild(li);
+                });
+                questionsContainer.style.display = 'block';
+            }
+        }
+
+        document.getElementById('search').addEventListener('input', () => {
+            const searchQuery = document.getElementById('search').value.toLowerCase();
+            const articles = document.querySelectorAll('.article-item');
+            articles.forEach(article => {
+                if (article.textContent.toLowerCase().includes(searchQuery)) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

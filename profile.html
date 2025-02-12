@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffff5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fffff5;
+            padding: 30px 40px;
+            border-radius: 10px;
+            
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        .form-group input[readonly] {
+            background-color: #e9e9e9;
+            cursor: not-allowed;
+        }
+
+        button {
+    width: 100%;
+    padding: 12px;
+    background-color: #8B4513; /* SaddleBrown */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for both buttons */
+button:hover {
+    background-color: #A0522D; /* Sienna */
+    transform: scale(1.05); /* Slight zoom */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Specific style for the "Back to Dashboard" button */
+.back-btn {
+    margin-top: 20px;
+    background-color: #8B4513; /* Same brown */
+}
+
+.back-btn:hover {
+    background-color: #A0522D; /* Darker brown on hover */
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Profile</h2>
+    <form id="profileForm">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" id="currentPassword" placeholder="Enter current password">
+        </div>
+        
+        <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password">
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" required>
+        </div>
+
+        <div class="form-group">
+            <label for="salary">Salary</label>
+            <input type="number" id="salary" required>
+        </div>
+
+        <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="relation">Relation</label>
+            <select id="relation" required>
+                <option value="single">Single</option>
+                <option value="married">Married</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="children">Number of Children</label>
+            <input type="number" id="children" min="0">
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email (Read-Only)</label>
+            <input type="email" id="email" readonly>
+        </div>
+
+        <div id="messageBox" style="display:none; padding: 10px; border-radius: 5px; margin-bottom: 20px;"></div>
+
+
+        <button type="submit">Update Profile</button>
+        <button type="button" class="back-btn" onclick="window.location.href='Money.html'">Back to Dashboard</button>
+    </form>
+</div>
+
+<script>
+
+let authToken = localStorage.getItem('authToken');
+
+// Utility function to display messages
+function showMessage(message, isSuccess = true) {
+  const messageBox = document.getElementById('messageBox');
+  messageBox.textContent = message;
+  messageBox.style.display = 'block';
+  messageBox.style.backgroundColor = isSuccess ? '#d4edda' : '#f8d7da';  // Green for success, red for error
+  messageBox.style.color = isSuccess ? '#155724' : '#721c24';
+  messageBox.style.border = isSuccess ? '1px solid #c3e6cb' : '1px solid #f5c6cb';
+  setTimeout(() => {
+    messageBox.style.display = 'none';
+  }, 3000);
+}
+
+// Fetch and populate user data
+async function fetchUserData() {
+  try {
+    const response = await fetch('/getUserData', {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      populateForm(data);
+    } else {
+      showMessage('Failed to fetch user data.', false);
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    showMessage('An error occurred while fetching user data.', false);
+  }
+}
+
+function populateForm(data) {
+  document.getElementById('firstName').value = data.firstName || '';
+  document.getElementById('lastName').value = data.lastName || '';
+  document.getElementById('username').value = data.username || '';
+  document.getElementById('age').value = data.age || '';
+  document.getElementById('salary').value = data.salary || '';
+  document.getElementById('country').value = data.country || '';
+  document.getElementById('phone').value = data.phone || '';
+  document.getElementById('relation').value = data.relation || 'single';
+  document.getElementById('children').value = data.children || 0;
+  document.getElementById('gender').value = data.gender || 'male';
+  document.getElementById('email').value = data.email || '';
+}
+
+// Update user profile data
+async function updateProfile(updatedData) {
+  try {
+    const response = await fetch('/updateUserData', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify(updatedData)
+    });
+
+    if (response.ok) {
+      showMessage('Profile updated successfully.');
+    } else {
+      showMessage('Failed to update profile.', false);
+    }
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    showMessage('An unexpected error occurred.', false);
+  }
+}
+
+// Change password
+async function changePassword(currentPassword, newPassword) {
+  try {
+    const response = await fetch('/changePassword', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+
+    if (response.ok) {
+      showMessage('Password changed successfully.');
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+    } else {
+      const errorText = await response.text();
+      showMessage(`Password change failed: ${errorText}`, false);
+    }
+  } catch (error) {
+    console.error('Error changing password:', error);
+    showMessage('An unexpected error occurred.', false);
+  }
+}
+
+// Handle form submission
+document.getElementById('profileForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const updatedData = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    username: document.getElementById('username').value,
+    age: parseInt(document.getElementById('age').value),
+    salary: parseFloat(document.getElementById('salary').value),
+    country: document.getElementById('country').value,
+    phone: document.getElementById('phone').value,
+    relation: document.getElementById('relation').value,
+    children: parseInt(document.getElementById('children').value),
+    gender: document.getElementById('gender').value
+  };
+
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+
+  await updateProfile(updatedData);
+
+  if (currentPassword && newPassword) {
+    await changePassword(currentPassword, newPassword);
+  }
+});
+
+// Load user data on page load
+window.onload = async function () {
+  if (!authToken) {
+    alert('You must log in first.');
+    window.location.href = '/';
+  } else {
+    await fetchUserData();
+  }
+};
+</script>
+
+</body>
+</html>
+

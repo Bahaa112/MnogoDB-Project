@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager</title>
+    <style>
+        .success {
+        color: #155724;
+        background-color: #fff5e5;
+        border: 1px solid #fff5e5;
+        padding: 10px;
+        border-radius: 5px;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .error {
+        color: #721c24;
+        background-color: #fff5e5;
+        border: 1px solid #fff5e5;
+        padding: 10px;
+        border-radius: 5px;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+   
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Animation for the description paragraph */
+        @keyframes fadeInSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            font-family: Poppins;
+            margin: 0;
+            padding: 0;
+            background-color: #fff5e5;
+        }
+
+        .hidden {
+            display: none !important;
+            /* Ensures it's hidden */
+        }
+
+
+        .sidebar {
+            width: 250px;
+            background-color: #2d1606;
+            color: #fff5e5;
+            height: 100vh;
+            position: fixed;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 2px 0 5px rgba(45, 22, 6, 0.1);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar ul li a {
+            color: #fff5e5;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: 500;
+            display: block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #3c2d25;
+        }
+
+        .sidebar p {
+            font-size: 24px;
+        }
+
+        .main {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+
+
+        .header {
+            text-align: center;
+            padding: 50px;
+            background-color: #fff5e5;
+            color: #2d1606;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 39px;
+        }
+
+        .prospects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .prospect-card {
+            background: #fff5e5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(45, 22, 6, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .prospect-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(45, 22, 6, 0.15);
+        }
+
+        .prospect-card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid #2d1606;
+        }
+
+        .prospect-card h3 {
+            margin: 15px 0 5px;
+            font-size: 25px;
+            color: #2d1606;
+        }
+
+        .prospect-card p {
+            margin: 5px 0;
+            color: #5c4033;
+            font-size: 19px;
+        }
+
+
+        .description {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            font-size: 22px;
+            background: #fff5e5;
+            animation: fadeInSlideUp 3s ease-in-out;
+            /* Animation applied */
+        }
+
+        .slider {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: #5c4033;
+            color: #fff5e5;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(45, 22, 6, 0.1);
+        }
+
+        .slider h2 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .slider p {
+            margin-top: 10px;
+            font-size: 21px;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff5e5;
+            font-weight: bold;
+
+
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2d1606;
+            font-weight: bold;
+
+        }
+
+        .form-container label {
+            font-size: 21px;
+            display: block;
+            margin-bottom: 10px;
+            color: #2d1606;
+            font-weight: bold;
+
+        }
+
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 19px;
+        }
+
+        .form-container input[type="checkbox"],
+        .form-container input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #5c4033;
+            color: #fff5e5;
+            border: none;
+            border-radius: 5px;
+            font-size: 21px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #3c2d25;
+        }
+
+        /* Add spacing specifically for buttons in the "Give Permissions" section */
+        #give-permissions .form-container button {
+            margin-bottom: 15px;
+            /* Add space between buttons */
+        }
+
+        /* Styles for the Create Account Message */
+        /* General Styles for Messages */
+        #permissions-messages,
+        #create-account-messages,
+        #find-account-messages {
+            font-size: 22px;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Success message styling with flickering green text */
+        .success {
+            color: #155724;
+            background-color: #fff5e5;
+            border: 1px solid #fff5e5;
+            animation: flicker-green 1.5s infinite;
+        }
+
+        /* Error message styling with flickering red text */
+        .error {
+            color: #721c24;
+            background-color: #fff5e5;
+            border: 1px solid #fff5e5;
+            animation: flicker-red 1.5s infinite;
+        }
+
+        /* Green flickering animation */
+        @keyframes flicker-green {
+
+            0%,
+            100% {
+                color: rgba(21, 87, 36, 1);
+            }
+
+            50% {
+                color: rgba(21, 87, 36, 0.2);
+            }
+        }
+
+        /* Red flickering animation */
+        @keyframes flicker-red {
+
+            0%,
+            100% {
+                color: rgba(114, 28, 36, 1);
+            }
+
+            50% {
+                color: rgba(114, 28, 36, 0.2);
+            }
+        }
+
+        /* General styling for the message container */
+        #update-account-message {
+            font-size: 16px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            /* Apply fade-in animation */
+        }
+
+        /* Styling for success messages */
+        #update-account-message.success {
+            color: #155724;
+            /* Dark green text */
+            background-color: #fff5e5;
+            /* Light green background */
+            border: 1px solid #fff5e5;
+            /* Green border */
+            animation: flicker-green 1.5s infinite;
+            /* Apply flicker animation */
+        }
+
+        /* Styling for error messages */
+        #update-account-message.error {
+            color: #721c24;
+            /* Dark red text */
+            background-color: #fff5e5;
+            /* Light red background */
+            border: 1px solid #fff5e5;
+            /* Red border */
+            animation: flicker-red 1.5s infinite;
+            /* Apply flicker animation */
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Green flickering animation for success */
+        @keyframes flicker-green {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Red flickering animation for error */
+        @keyframes flicker-red {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        <!---------------------------------------------------------------------------------------------------->
+        .interests-group {
+            display: flex;
+            flex-wrap: wrap;
+            /* Wraps items to the next line if they overflow */
+            gap: 15px;
+            /* Adds space between items */
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .interests-group label {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .gender-group {
+            display: flex;
+            align-items: center;
+            /* Align items vertically */
+            gap: 20px;
+            /* Add spacing between items */
+            margin-bottom: 15px;
+            /* Add spacing below the group */
+        }
+
+        .gender-group label {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .gender-group input[type="radio"] {
+            margin-right: 5px;
+            /* Add spacing between the radio button and label text */
+        }
+
+        .interests-group input[type="checkbox"] {
+            margin-right: 5px;
+            /* Adds spacing between the checkbox and label text */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <ul>
+            <p>💰 Smart Budgeting</p>
+            <li><a onclick="showScreen('home')">Home</a></li>
+            <li><a onclick="showScreen('create-account')">Create Account</a></li>
+            <li><a onclick="showScreen('delete-account')">Delete Account</a></li>
+            <li><a onclick="showScreen('update-account')">Update Account</a></li>
+            <li><a onclick="showScreen('find-account')">Find Account</a></li>
+            <li><a onclick="showScreen('view-all-users')">View All Users</a></li>
+            <li><a onclick="showScreen('give-permissions')">Setting</a></li>
+        </ul>
+    </div>
+
+
+    <!-- Home Section -->
+    <div id="home" class="main">
+        <div class="header">
+            <h1>Welcome to Smart Budgeting</h1>
+        </div>
+        <div class="prospects">
+            <div class="prospect-card">
+                <img src="./images/Aseel.jpeg" alt="Aseel" />
+                <h3>Aseel Abd Elhaq</h3>
+                <p>Account Manager</p>
+            </div>
+            <div class="prospect-card">
+                <img src="./images/Deema.jpeg" alt="Deema" />
+                <h3>Deema Abu Nimeh</h3>
+                <p>Finance Advisor</p>
+            </div>
+            <div class="prospect-card">
+                <img src="./images/Bahaa.jpeg" alt="Baha" />
+                <h3>Baha Jaghoob</h3>
+                <p>Support Specialist</p>
+            </div>
+        </div>
+        <div class="description">
+            <p><strong>Smart Budgeting</strong>
+                is a user-friendly platform designed to help individuals take control of their
+                financial lives. We focus on simplifying money management, offering tools to track spending,
+                set financial goals, and visualize expenses. Our goal is to empower users with the knowledge and
+                resources needed to make informed financial decisions. Whether you're saving for a major milestone or
+                managing day-to-day expenses, we're here to support your journey.</p>
+        </div>
+
+    </div>
+    <!-- Delete Account Section -->
+    <div id="delete-account" class="main hidden">
+        <div class="form-container">
+            <h2>Delete Account</h2>
+            <form id="delete-account-form">
+                <div>
+                    <label for="email-delete">Email</label>
+                    <input type="email" id="email-delete" name="email" placeholder="Enter your email" required>
+                </div>
+                <div>
+                    <label for="password-delete">Password</label>
+                    <input type="password" id="password-delete" name="password" placeholder="Enter your password"
+                        required>
+                </div>
+                <div id="delete-account-messages" style="color: red; margin-top: 10px;"></div>
+                <button type="submit">Delete Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="view-all-users" class="main hidden">
+        <div class="form-container">
+          <h2>All Registered Users</h2>
+          <table id="users-table" border="1" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Salary</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>Relation</th>
+                <th>Gender</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <!-- User rows will be inserted here -->
+            </tbody>
+          </table>
+          <div id="fetch-users-message" style="margin-top: 15px;"></div>
+        </div>
+      </div>
+    <!-- permission Fields -->
+    <div id="give-permissions" class="main hidden">
+        <div class="form-container">
+          <h2>Manage Admins</h2>
+          <form id="admin-form">
+            <label for="action">Choose Action</label>
+            <select id="action" name="action" onchange="toggleFields()" required>
+              <option value="" disabled selected>Select an action</option>
+              <option value="add">Add Admin</option>
+              <option value="remove">Remove Admin</option>
+              <option value="update">Update Admin Password</option>
+            </select>
+      
+            <div id="email-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+      
+            <div id="username-field" class="hidden">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" />
+            </div>
+      
+            <div id="password-field" class="hidden">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" minlength="8" />
+            </div>
+      
+            <button type="submit">Submit</button>
+            <div id="admin-messages" style="margin-top: 10px;"></div>
+          </form>
+        </div>
+      </div>
+
+
+
+    <!-- Common Fields -->
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter email" required>
+    </div>
+    <div id="password-field" class="hidden">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    </div>
+
+    <!-- Update Fields -->
+    <div id="update-fields" class="hidden">
+        <label for="new-password">New Password</label>
+        <input type="password" id="new-password" name="newPassword" placeholder="Enter new password">
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" id="submit-btn">Submit</button>
+    </form>
+    </div>
+    </div>
+
+    <!-- Find Account Section -->
+    <!-- Find Account Section -->
+<div id="find-account" class="main hidden">
+    <div class="form-container">
+        <h2>Find Account</h2>
+        <form id="find-account-form">
+            <div>
+                <label for="username-find">Username</label>
+                <input type="text" id="username-find" name="username" placeholder="Enter username" required>
+            </div>
+            <button type="submit">Search User</button>
+        </form>
+
+        <!-- Messages -->
+        <div id="find-account-messages" style="margin-top: 10px;"></div>
+
+        <!-- User Details -->
+        <div id="user-details" style="margin-top: 20px; display: none; animation: fadeIn 1s;">
+            <h3>User Details</h3>
+            <p><strong>First Name:</strong> <span id="firstName-detail"></span></p>
+            <p><strong>Last Name:</strong> <span id="lastName-detail"></span></p>
+            <p><strong>Email:</strong> <span id="email-detail"></span></p>
+            <p><strong>Age:</strong> <span id="age-detail"></span></p>
+            <p><strong>Salary:</strong> <span id="salary-detail"></span></p>
+            <p><strong>Country:</strong> <span id="country-detail"></span></p>
+            <p><strong>Phone Number:</strong> <span id="phoneNumber-detail"></span></p>
+            <p><strong>Relation:</strong> <span id="relation-detail"></span></p>
+            <p><strong>Children:</strong> <span id="children-detail"></span></p>
+            <p><strong>Gender:</strong> <span id="gender-detail"></span></p>
+            <p><strong>Interests:</strong> <span id="interests-detail"></span></p>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Update Account Section -->
+    <div id="update-account" class="main hidden">
+        <div class="form-container">
+            <h2>Update Account</h2>
+            <form id="update-account-form" action="/update-account" method="POST">
+                <!-- Current Email -->
+                <div>
+                    <label for="email-update">Email (required)</label>
+                    <input type="email" id="email-update" name="email" placeholder="Enter your email" required>
+                </div>
+                <!-- Current Password -->
+                <div>
+                    <label for="password-old">Password (required)</label>
+                    <input type="password" id="password-old" name="password" placeholder="Enter your current password"
+                        required>
+                </div>
+                <!-- Fields to Edit -->
+                <div>
+                    <label for="firstname-update">New First Name</label>
+                    <input type="text" id="firstname-update" name="firstName" placeholder="Enter new first name">
+                </div>
+                <div>
+                    <label for="lastname-update">New Last Name</label>
+                    <input type="text" id="lastname-update" name="lastName" placeholder="Enter new last name">
+                </div>
+                <div>
+                    <label for="username-update">New Username</label>
+                    <input type="text" id="username-update" name="username" placeholder="Enter new username">
+                </div>
+                <div>
+                    <label for="age-update">New Age</label>
+                    <input type="number" id="age-update" name="age" placeholder="Enter new age">
+                </div>
+                <div>
+                    <label for="relation-update">Relation</label>
+                    <select id="relation-update" name="relation">
+                        <option value="">Select Relation</option>
+                        <option value="single">Single</option>
+                        <option value="married">Married</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="children-update">Number of Children</label>
+                    <input type="number" id="children-update" name="children" placeholder="Enter number of children">
+                </div>
+                <div>
+                    <label for="password-new">New Password</label>
+                    <input type="password" id="password-new" name="newPassword" placeholder="Enter new password"
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                        title="Password must include at least one letter, one number, one special character, and be at least 8 characters long.">
+
+                </div>
+                <div>
+                    <label for="phone-update">New Phone Number</label>
+                    <input type="text" id="phone-update" name="phone" placeholder="Enter new phone number">
+                </div>
+                <div>
+                    <label for="country-update">New Country</label>
+                    <select id="country-update" name="country">
+                        <option value="">Select Country</option>
+                        <option value="afghanistan">Afghanistan</option>
+                        <option value="albania">Albania</option>
+                        <option value="algeria">Algeria</option>
+                        <option value="andorra">Andorra</option>
+                        <option value="angola">Angola</option>
+                        <option value="argentina">Argentina</option>
+                        <option value="armenia">Armenia</option>
+                        <option value="australia">Australia</option>
+                        <option value="austria">Austria</option>
+                        <option value="azerbaijan">Azerbaijan</option>
+                        <option value="bahamas">Bahamas</option>
+                        <option value="bahrain">Bahrain</option>
+                        <option value="bangladesh">Bangladesh</option>
+                        <option value="barbados">Barbados</option>
+                        <option value="belarus">Belarus</option>
+                        <option value="belgium">Belgium</option>
+                        <option value="belize">Belize</option>
+                        <option value="benin">Benin</option>
+                        <option value="bhutan">Bhutan</option>
+                        <option value="bolivia">Bolivia</option>
+                        <option value="bosnia">Bosnia and Herzegovina</option>
+                        <option value="botswana">Botswana</option>
+                        <option value="brazil">Brazil</option>
+                        <option value="brunei">Brunei</option>
+                        <option value="bulgaria">Bulgaria</option>
+                        <option value="burkina">Burkina Faso</option>
+                        <option value="burundi">Burundi</option>
+                        <option value="cabo verde">Cabo Verde</option>
+                        <option value="cambodia">Cambodia</option>
+                        <option value="cameroon">Cameroon</option>
+                        <option value="canada">Canada</option>
+                        <option value="chad">Chad</option>
+                        <option value="chile">Chile</option>
+                        <option value="china">China</option>
+                        <option value="colombia">Colombia</option>
+                        <option value="comoros">Comoros</option>
+                        <option value="congo">Congo</option>
+                        <option value="costa rica">Costa Rica</option>
+                        <option value="croatia">Croatia</option>
+                        <option value="cuba">Cuba</option>
+                        <option value="cyprus">Cyprus</option>
+                        <option value="czech republic">Czech Republic</option>
+                        <option value="denmark">Denmark</option>
+                        <option value="djibouti">Djibouti</option>
+                        <option value="dominica">Dominica</option>
+                        <option value="dominican republic">Dominican Republic</option>
+                        <option value="ecuador">Ecuador</option>
+                        <option value="egypt">Egypt</option>
+                        <option value="el salvador">El Salvador</option>
+                        <option value="eritrea">Eritrea</option>
+                        <option value="estonia">Estonia</option>
+                        <option value="eswatini">Eswatini</option>
+                        <option value="ethiopia">Ethiopia</option>
+                        <option value="fiji">Fiji</option>
+                        <option value="finland">Finland</option>
+                        <option value="france">France</option>
+                        <option value="gabon">Gabon</option>
+                        <option value="gambia">Gambia</option>
+                        <option value="georgia">Georgia</option>
+                        <option value="germany">Germany</option>
+                        <option value="ghana">Ghana</option>
+                        <option value="greece">Greece</option>
+                        <option value="grenada">Grenada</option>
+                        <option value="guatemala">Guatemala</option>
+                        <option value="guinea">Guinea</option>
+                        <option value="guinea-bissau">Guinea-Bissau</option>
+                        <option value="guyana">Guyana</option>
+                        <option value="haiti">Haiti</option>
+                        <option value="honduras">Honduras</option>
+                        <option value="hungary">Hungary</option>
+                        <option value="iceland">Iceland</option>
+                        <option value="india">India</option>
+                        <option value="indonesia">Indonesia</option>
+                        <option value="iran">Iran</option>
+                        <option value="iraq">Iraq</option>
+                        <option value="ireland">Ireland</option>
+                        <option value="italy">Italy</option>
+                        <option value="jamaica">Jamaica</option>
+                        <option value="japan">Japan</option>
+                        <option value="jordan">Jordan</option>
+                        <option value="kazakhstan">Kazakhstan</option>
+                        <option value="kenya">Kenya</option>
+                        <option value="kiribati">Kiribati</option>
+                        <option value="korea, north">North Korea</option>
+                        <option value="korea, south">South Korea</option>
+                        <option value="kuwait">Kuwait</option>
+                        <option value="kyrgyzstan">Kyrgyzstan</option>
+                        <option value="laos">Laos</option>
+                        <option value="latvia">Latvia</option>
+                        <option value="lebanon">Lebanon</option>
+                        <option value="lesotho">Lesotho</option>
+                        <option value="liberia">Liberia</option>
+                        <option value="libya">Libya</option>
+                        <option value="luxembourg">Luxembourg</option>
+                        <option value="madagascar">Madagascar</option>
+                        <option value="malawi">Malawi</option>
+                        <option value="malaysia">Malaysia</option>
+                        <option value="maldives">Maldives</option>
+                        <option value="malta">Malta</option>
+                        <option value="mauritania">Mauritania</option>
+                        <option value="mexico">Mexico</option>
+                        <option value="monaco">Monaco</option>
+                        <option value="mongolia">Mongolia</option>
+                        <option value="montenegro">Montenegro</option>
+                        <option value="morocco">Morocco</option>
+                        <option value="mozambique">Mozambique</option>
+                        <option value="myanmar">Myanmar</option>
+                        <option value="nepal">Nepal</option>
+                        <option value="netherlands">Netherlands</option>
+                        <option value="new zealand">New Zealand</option>
+                        <option value="nicaragua">Nicaragua</option>
+                        <option value="nigeria">Nigeria</option>
+                        <option value="norway">Norway</option>
+                        <option value="oman">Oman</option>
+                        <option value="pakistan">Pakistan</option>
+                        <option value="palau">Palau</option>
+                        <option value="panama">Panama</option>
+                        <option value="palestine">palestine</option>
+                        <option value="paraguay">Paraguay</option>
+                        <option value="philippines">Philippines</option>
+                        <option value="poland">Poland</option>
+                        <option value="portugal">Portugal</option>
+                        <option value="qatar">Qatar</option>
+                        <option value="romania">Romania</option>
+                        <option value="russia">Russia</option>
+                        <option value="rwanda">Rwanda</option>
+                        <option value="saudi arabia">Saudi Arabia</option>
+                        <option value="senegal">Senegal</option>
+                        <option value="serbia">Serbia</option>
+                        <option value="seychelles">Seychelles</option>
+                        <option value="singapore">Singapore</option>
+                        <option value="slovakia">Slovakia</option>
+                        <option value="slovenia">Slovenia</option>
+                        <option value="somalia">Somalia</option>
+                        <option value="south africa">South Africa</option>
+                        <option value="spain">Spain</option>
+                        <option value="sri lanka">Sri Lanka</option>
+                        <option value="sudan">Sudan</option>
+                        <option value="suriname">Suriname</option>
+                        <option value="sweden">Sweden</option>
+                        <option value="switzerland">Switzerland</option>
+                        <option value="syria">Syria</option>
+                        <option value="taiwan">Taiwan</option>
+                        <option value="tajikistan">Tajikistan</option>
+                        <option value="tanzania">Tanzania</option>
+                        <option value="thailand">Thailand</option>
+                        <option value="togo">Togo</option>
+                        <option value="tunisia">Tunisia</option>
+                        <option value="turkey">Turkey</option>
+                        <option value="ukraine">Ukraine</option>
+                        <option value="united arab emirates">United Arab Emirates</option>
+                        <option value="united kingdom">United Kingdom</option>
+                        <option value="united states">United States</option>
+                        <option value="uzbekistan">Uzbekistan</option>
+                        <option value="vietnam">Vietnam</option>
+                        <option value="yemen">Yemen</option>
+                        <option value="zambia">Zambia</option>
+                        <option value="zimbabwe">Zimbabwe</option>
+
+                    </select>
+                </div>
+                <div>
+                    <label for="salary-update">New Salary</label>
+                    <input type="number" id="salary-update" name="salary" placeholder="Enter new salary">
+                </div>
+                <!-- Submit Button -->
+                <button type="submit">Update Account</button>
+                <div id="update-account-message"></div> <!-- The message container -->
+
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Create Account Section -->
+    <div id="create-account" class="main hidden">
+        <div class="form-container">
+            <h2>Create Your Account</h2>
+            <!-- Ensure form attributes match backend expectations -->
+            <form id="create-account-form" action="/create-account" method="POST">
+                <div>
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                </div>
+                <div>
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                </div>
+                <div>
+                    <label for="username">User Name</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" placeholder="Enter your age" required>
+                </div>
+                <div>
+                    <label for="salary">Salary</label>
+                    <input type="number" id="salary" name="salary" placeholder="Enter your salary" required>
+                </div>
+                <div>
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                        <option value="afghanistan">Afghanistan</option>
+                        <option value="albania">Albania</option>
+                        <option value="algeria">Algeria</option>
+                        <option value="andorra">Andorra</option>
+                        <option value="angola">Angola</option>
+                        <option value="argentina">Argentina</option>
+                        <option value="armenia">Armenia</option>
+                        <option value="australia">Australia</option>
+                        <option value="austria">Austria</option>
+                        <option value="azerbaijan">Azerbaijan</option>
+                        <option value="bahamas">Bahamas</option>
+                        <option value="bahrain">Bahrain</option>
+                        <option value="bangladesh">Bangladesh</option>
+                        <option value="barbados">Barbados</option>
+                        <option value="belarus">Belarus</option>
+                        <option value="belgium">Belgium</option>
+                        <option value="belize">Belize</option>
+                        <option value="benin">Benin</option>
+                        <option value="bhutan">Bhutan</option>
+                        <option value="bolivia">Bolivia</option>
+                        <option value="bosnia">Bosnia and Herzegovina</option>
+                        <option value="botswana">Botswana</option>
+                        <option value="brazil">Brazil</option>
+                        <option value="brunei">Brunei</option>
+                        <option value="bulgaria">Bulgaria</option>
+                        <option value="burkina">Burkina Faso</option>
+                        <option value="burundi">Burundi</option>
+                        <option value="cabo verde">Cabo Verde</option>
+                        <option value="cambodia">Cambodia</option>
+                        <option value="cameroon">Cameroon</option>
+                        <option value="canada">Canada</option>
+                        <option value="chad">Chad</option>
+                        <option value="chile">Chile</option>
+                        <option value="china">China</option>
+                        <option value="colombia">Colombia</option>
+                        <option value="comoros">Comoros</option>
+                        <option value="congo">Congo</option>
+                        <option value="costa rica">Costa Rica</option>
+                        <option value="croatia">Croatia</option>
+                        <option value="cuba">Cuba</option>
+                        <option value="cyprus">Cyprus</option>
+                        <option value="czech republic">Czech Republic</option>
+                        <option value="denmark">Denmark</option>
+                        <option value="djibouti">Djibouti</option>
+                        <option value="dominica">Dominica</option>
+                        <option value="dominican republic">Dominican Republic</option>
+                        <option value="ecuador">Ecuador</option>
+                        <option value="egypt">Egypt</option>
+                        <option value="el salvador">El Salvador</option>
+                        <option value="eritrea">Eritrea</option>
+                        <option value="estonia">Estonia</option>
+                        <option value="eswatini">Eswatini</option>
+                        <option value="ethiopia">Ethiopia</option>
+                        <option value="fiji">Fiji</option>
+                        <option value="finland">Finland</option>
+                        <option value="france">France</option>
+                        <option value="gabon">Gabon</option>
+                        <option value="gambia">Gambia</option>
+                        <option value="georgia">Georgia</option>
+                        <option value="germany">Germany</option>
+                        <option value="ghana">Ghana</option>
+                        <option value="greece">Greece</option>
+                        <option value="grenada">Grenada</option>
+                        <option value="guatemala">Guatemala</option>
+                        <option value="guinea">Guinea</option>
+                        <option value="guinea-bissau">Guinea-Bissau</option>
+                        <option value="guyana">Guyana</option>
+                        <option value="haiti">Haiti</option>
+                        <option value="honduras">Honduras</option>
+                        <option value="hungary">Hungary</option>
+                        <option value="iceland">Iceland</option>
+                        <option value="india">India</option>
+                        <option value="indonesia">Indonesia</option>
+                        <option value="iran">Iran</option>
+                        <option value="iraq">Iraq</option>
+                        <option value="ireland">Ireland</option>
+                        <option value="italy">Italy</option>
+                        <option value="jamaica">Jamaica</option>
+                        <option value="japan">Japan</option>
+                        <option value="jordan">Jordan</option>
+                        <option value="kazakhstan">Kazakhstan</option>
+                        <option value="kenya">Kenya</option>
+                        <option value="kiribati">Kiribati</option>
+                        <option value="korea, north">North Korea</option>
+                        <option value="korea, south">South Korea</option>
+                        <option value="kuwait">Kuwait</option>
+                        <option value="kyrgyzstan">Kyrgyzstan</option>
+                        <option value="laos">Laos</option>
+                        <option value="latvia">Latvia</option>
+                        <option value="lebanon">Lebanon</option>
+                        <option value="lesotho">Lesotho</option>
+                        <option value="liberia">Liberia</option>
+                        <option value="libya">Libya</option>
+                        <option value="luxembourg">Luxembourg</option>
+                        <option value="madagascar">Madagascar</option>
+                        <option value="malawi">Malawi</option>
+                        <option value="malaysia">Malaysia</option>
+                        <option value="maldives">Maldives</option>
+                        <option value="malta">Malta</option>
+                        <option value="mauritania">Mauritania</option>
+                        <option value="mexico">Mexico</option>
+                        <option value="monaco">Monaco</option>
+                        <option value="mongolia">Mongolia</option>
+                        <option value="montenegro">Montenegro</option>
+                        <option value="morocco">Morocco</option>
+                        <option value="mozambique">Mozambique</option>
+                        <option value="myanmar">Myanmar</option>
+                        <option value="nepal">Nepal</option>
+                        <option value="netherlands">Netherlands</option>
+                        <option value="new zealand">New Zealand</option>
+                        <option value="nicaragua">Nicaragua</option>
+                        <option value="nigeria">Nigeria</option>
+                        <option value="norway">Norway</option>
+                        <option value="oman">Oman</option>
+                        <option value="pakistan">Pakistan</option>
+                        <option value="palau">Palau</option>
+                        <option value="panama">Panama</option>
+                        <option value="palestine">palestine</option>
+                        <option value="paraguay">Paraguay</option>
+                        <option value="philippines">Philippines</option>
+                        <option value="poland">Poland</option>
+                        <option value="portugal">Portugal</option>
+                        <option value="qatar">Qatar</option>
+                        <option value="romania">Romania</option>
+                        <option value="russia">Russia</option>
+                        <option value="rwanda">Rwanda</option>
+                        <option value="saudi arabia">Saudi Arabia</option>
+                        <option value="senegal">Senegal</option>
+                        <option value="serbia">Serbia</option>
+                        <option value="seychelles">Seychelles</option>
+                        <option value="singapore">Singapore</option>
+                        <option value="slovakia">Slovakia</option>
+                        <option value="slovenia">Slovenia</option>
+                        <option value="somalia">Somalia</option>
+                        <option value="south africa">South Africa</option>
+                        <option value="spain">Spain</option>
+                        <option value="sri lanka">Sri Lanka</option>
+                        <option value="sudan">Sudan</option>
+                        <option value="suriname">Suriname</option>
+                        <option value="sweden">Sweden</option>
+                        <option value="switzerland">Switzerland</option>
+                        <option value="syria">Syria</option>
+                        <option value="taiwan">Taiwan</option>
+                        <option value="tajikistan">Tajikistan</option>
+                        <option value="tanzania">Tanzania</option>
+                        <option value="thailand">Thailand</option>
+                        <option value="togo">Togo</option>
+                        <option value="tunisia">Tunisia</option>
+                        <option value="turkey">Turkey</option>
+                        <option value="ukraine">Ukraine</option>
+                        <option value="united arab emirates">United Arab Emirates</option>
+                        <option value="united kingdom">United Kingdom</option>
+                        <option value="united states">United States</option>
+                        <option value="uzbekistan">Uzbekistan</option>
+                        <option value="vietnam">Vietnam</option>
+                        <option value="yemen">Yemen</option>
+                        <option value="zambia">Zambia</option>
+                        <option value="zimbabwe">Zimbabwe</option>
+
+
+                    </select>
+                </div>
+                <div>
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="text" id="phoneNumber" name="phone" placeholder="Enter your phone number"
+                        required>
+                </div>
+                <div>
+                    <label for="relation">Relation</label>
+                    <select id="relation" name="relation" required>
+                        <option value="" disabled selected>Select relation</option>
+                        <option value="single">Single</option>
+                        <option value="married">Married</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="children">If engaged, how many children?</label>
+                    <input type="number" id="children" name="children" placeholder="Enter number of children">
+                </div>
+                <div>
+                    <label>Gender</label>
+                    <div class="gender-group">
+                        <label><input type="radio" id="male" name="gender" value="male" required> Male</label>
+                        <label><input type="radio" id="female" name="gender" value="female" required> Female</label>
+                    </div>
+                </div>
+                <div>
+                    <label>Interests</label>
+                    <div class="interests-group">
+                        <label><input type="checkbox" name="interests" value="reading"> 📖 Reading</label>
+                        <label><input type="checkbox" name="interests" value="coding"> 💻 Coding</label>
+                        <label><input type="checkbox" name="interests" value="traveling"> 🌍 Traveling</label>
+                        <label><input type="checkbox" name="interests" value="sports"> ⚽ Sports</label>
+                        <label><input type="checkbox" name="interests" value="music"> 🎵 Music</label>
+                        <label><input type="checkbox" name="interests" value="art"> 🎨 Art</label>
+                        <label><input type="checkbox" name="interests" value="photography"> 📸 Photography</label>
+                        <label><input type="checkbox" name="interests" value="gaming"> 🎮 Gaming</label>
+                    </div>
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8"
+                        required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
+                        title="Password must include at least one letter, one number, one special character, and be at least 8 characters long.">
+                </div>
+                <div>
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the Terms and Conditions</label>
+                </div>
+                <div id="create-account-messages" style="margin-top: 10px;"></div>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    </div>
+    </div>
+
+    </div>
+    </div>
+    <script>
+
+document.getElementById('create-account-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const token = localStorage.getItem('authToken'); // Get the token from local storage
+    if (!token) {
+      alert('You must be logged in as an admin to create an account.');
+      return;
+    }
+
+    const formData = new FormData(this);
+    const data = {};
+    formData.forEach((value, key) => (data[key] = value)); // Convert form data to JSON
+
+    try {
+      const response = await fetch('/signUp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` // Send the token in the Authorization header
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Display success message and reset the form
+        document.getElementById('create-account-messages').innerHTML = `<div class="success"> ${result.message}</div>`;
+        this.reset();
+      } else {
+        // Display error message
+        document.getElementById('create-account-messages').innerHTML = `<div class="error"> ${result.error || 'Failed to create account.'}</div>`;
+      }
+    } catch (error) {
+      console.error('Error creating account:', error);
+      document.getElementById('create-account-messages').innerHTML = `<div class="error"> An unexpected error occurred. Please try again later.</div>`;
+    }
+  });
+
+  document.getElementById('delete-account-form').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(this);
+  const data = {};
+  formData.forEach((value, key) => (data[key] = value)); // Convert form data to JSON
+
+  try {
+    const response = await fetch('/delete-account', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Success: Show success message
+      document.getElementById('delete-account-messages').innerHTML = `<div class="success"> ${result.message}</div>`;
+      this.reset();
+    } else {
+      // Error: Show specific error message
+      document.getElementById('delete-account-messages').innerHTML = `<div class="error"> ${result.error}</div>`;
+    }
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    document.getElementById('delete-account-messages').innerHTML = `<div class="error"> An unexpected error occurred. Please try again later.</div>`;
+  }
+});
+
+document.getElementById('find-account-form').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(this);
+  const data = {};
+  formData.forEach((value, key) => (data[key] = value)); // Convert form data to JSON
+
+  try {
+    const response = await fetch('/find-account', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Display user details
+      document.getElementById('find-account-messages').innerHTML = `<div class="success"> User found!</div>`;
+      document.getElementById('user-details').style.display = 'block';
+      document.getElementById('firstName-detail').textContent = result.firstName;
+      document.getElementById('lastName-detail').textContent = result.lastName;
+      document.getElementById('email-detail').textContent = result.email;
+      document.getElementById('age-detail').textContent = result.age;
+      document.getElementById('salary-detail').textContent = result.salary;
+      document.getElementById('country-detail').textContent = result.country;
+      document.getElementById('phoneNumber-detail').textContent = result.phoneNumber;
+      document.getElementById('relation-detail').textContent = result.relation;
+      document.getElementById('children-detail').textContent = result.children;
+      document.getElementById('gender-detail').textContent = result.gender;
+      document.getElementById('interests-detail').textContent = result.interests || 'N/A';
+    } else {
+      // Show error message if username is not found
+      document.getElementById('find-account-messages').innerHTML = `<div class="error"> ${result.error}</div>`;
+      document.getElementById('user-details').style.display = 'none';
+    }
+  } catch (error) {
+    console.error('Error finding user:', error);
+    document.getElementById('find-account-messages').innerHTML = `<div class="error"> An unexpected error occurred. Please try again later.</div>`;
+  }
+});
+
+document.getElementById('update-account-form').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(this);
+  const data = {};
+  formData.forEach((value, key) => (data[key] = value)); // Convert form data to JSON
+
+  try {
+    const response = await fetch('/update-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Display success message
+      document.getElementById('update-account-message').innerHTML = `<div class="success"> ${result.message}</div>`;
+      this.reset(); // Optionally reset the form
+    } else {
+      // Display specific error message
+      document.getElementById('update-account-message').innerHTML = `<div class="error"> ${result.error}</div>`;
+    }
+  } catch (error) {
+    console.error('Error updating account:', error);
+    document.getElementById('update-account-message').innerHTML = `<div class="error"> An unexpected error occurred. Please try again later.</div>`;
+  }
+});
+
+document.getElementById('admin-form').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  const action = document.getElementById('action').value;
+  const email = document.getElementById('email').value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  let endpoint = '';
+  let bodyData = { email };
+
+  if (action === 'add') {
+    endpoint = '/add-admin';
+    bodyData = { ...bodyData, username, password };
+  } else if (action === 'remove') {
+    endpoint = '/remove-admin';
+  } else if (action === 'update') {
+    endpoint = '/update-admin';
+    bodyData = { ...bodyData, newPassword: password };
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyData)
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      document.getElementById('admin-messages').innerHTML = `<div class="success"> ${result.message}</div>`;
+      this.reset();
+    } else {
+      document.getElementById('admin-messages').innerHTML = `<div class="error"> ${result.error}</div>`;
+    }
+  } catch (error) {
+    console.error('Error managing admin:', error);
+    document.getElementById('admin-messages').innerHTML = `<div class="error"> An unexpected error occurred.</div>`;
+  }
+});
+
+function toggleFields() {
+  const action = document.getElementById('action').value;
+  document.getElementById('username-field').classList.toggle('hidden', action !== 'add');
+  document.getElementById('password-field').classList.toggle('hidden', action === 'remove');
+}
+
+async function fetchAndDisplayUsers() {
+    const token = localStorage.getItem('authToken'); // Admin must be authenticated
+    if (!token) {
+      alert('You must be logged in as an admin to view users.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/all-users', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        document.getElementById('fetch-users-message').innerHTML = `<div class="error"> Failed to fetch users.</div>`;
+        return;
+      }
+
+      const users = await response.json();
+      const tableBody = document.getElementById('users-table-body');
+      tableBody.innerHTML = ''; // Clear previous rows
+
+      users.forEach(user => {
+        const row = `
+          <tr>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.username}</td>
+            <td>${user.email}</td>
+            <td>${user.age}</td>
+            <td>${user.salary}</td>
+            <td>${user.country}</td>
+            <td>${user.phone}</td>
+            <td>${user.relation}</td>
+            <td>${user.gender}</td>
+          </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', row);
+      });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      document.getElementById('fetch-users-message').innerHTML = `<div class="error"> An unexpected error occurred.</div>`;
+    }
+  }
+
+  // Hook into the "View All Users" menu click to fetch users
+  document.querySelector('a[onclick="showScreen(\'view-all-users\')"]').addEventListener('click', fetchAndDisplayUsers);
+
+
+
+
+        // Function to switch between screens
+        function showScreen(screenId) {
+            const sections = document.querySelectorAll('.main');
+            sections.forEach(section => section.classList.add('hidden'));
+            const selected = document.getElementById(screenId);
+            if (selected) selected.classList.remove('hidden');
+        }
+
+        
+    </script>
+
+
+
+
+
+</body>
+
+
+</html>
